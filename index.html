@@ -12,7 +12,22 @@
             /* Make body scrollable for three sections */
             height: 300vh; 
             overflow-x: hidden;
+            /* Removed background image from body, leaving only the fallback color */
             background-color: #0a192f; 
+        }
+        /* New element for the background image */
+        #background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./my_image.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: 0; /* Changed from -1 to bring it in front of the body background */
+            opacity: 0; /* Start fully transparent */
         }
         canvas {
             display: block;
@@ -21,6 +36,7 @@
             top: 0;
             left: 0;
             transition: opacity 0.3s ease-out;
+            z-index: 2; /* Set z-index to ensure canvas is on top of content initially */
         }
         .content-section {
             display: flex;
@@ -30,6 +46,8 @@
             width: 100%;
             box-sizing: border-box; /* Ensures padding is included in height */
             padding: 2rem;
+            position: relative; /* Ensure content stays above background */
+            z-index: 1; /* Content is above background image but below canvas */
         }
         /* New style for the combined section */
         #about-section {
@@ -91,10 +109,13 @@
             color: #8892b0;
             font-family: 'Verdana', sans-serif;
             font-size: 0.8rem;
+            z-index: 1; /* Ensure footer is above background image */
         }
     </style>
 </head>
 <body>
+    <!-- MOVED: Background image div is now the first element -->
+    <div id="background-image"></div>
     <canvas id="particle-canvas"></canvas>
 
     <!-- GIF section -->
@@ -125,9 +146,10 @@
 
     <script>
         const canvas = document.getElementById('particle-canvas');
-        // Add the willReadFrequently attribute here
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const subtitle = document.getElementById('subtitle');
+        // Get a reference to the background image element
+        const bgImage = document.getElementById('background-image');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -147,9 +169,19 @@
 
         // Handle scroll events
         window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+            // --- ADDED: Logic for background image fade-in ---
+            if (pageHeight > 0) {
+                let opacity = scrollPosition / pageHeight;
+                // Removed the "* 1.5" multiplier for a more gradual fade
+                bgImage.style.opacity = Math.min(opacity, 1); 
+            }
+
             // Fade out canvas as user scrolls down
             const scrollThreshold = window.innerHeight * 0.1;
-            if (window.scrollY > scrollThreshold) {
+            if (scrollPosition > scrollThreshold) {
                 canvas.style.opacity = '0';
             } else {
                 canvas.style.opacity = '1';
@@ -247,6 +279,7 @@
             }
         }
 
+        // --- CORRECTED CODE BLOCK ---
         // Animation loop
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
