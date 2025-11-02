@@ -1,305 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jonghwi Kim</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            /* Make body scrollable for three sections */
-            height: 300vh; 
-            overflow-x: hidden;
-            /* Removed background image from body, leaving only the fallback color */
-            background-color: #0a192f; 
-        }
-        /* New element for the background image */
-        #background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('./my_image.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            z-index: 0; /* Changed from -1 to bring it in front of the body background */
-            opacity: 0; /* Start fully transparent */
-        }
-        canvas {
-            display: block;
-            /* Keep the canvas fixed at the top */
-            position: fixed;
-            top: 0;
-            left: 0;
-            transition: opacity 0.3s ease-out;
-            z-index: 2; /* Set z-index to ensure canvas is on top of content initially */
-        }
-        .content-section {
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Center content vertically and horizontally */
-            height: 100vh;
-            width: 100%;
-            box-sizing: border-box; /* Ensures padding is included in height */
-            padding: 2rem;
-            position: relative; /* Ensure content stays above background */
-            z-index: 1; /* Content is above background image but below canvas */
-        }
-        /* New style for the combined section */
-        #about-section {
-            flex-direction: column;
-            justify-content: center;
-            gap: 5vh; /* Add space between subtitle and boxes */
-        }
-        #subtitle {
-            font-family: 'Verdana', sans-serif;
-            font-size: clamp(1.5rem, 4vw, 2.5rem); /* Made font size smaller */
-            color: #ccd6f6;
-            font-weight: 300; /* Made font thinner */
-            opacity: 0; /* Initially hidden */
-            transition: opacity 0.5s ease-in;
-            text-align: center; /* Good for multi-line text */
-            margin-bottom: 0; /* Removed margin to use gap instead */
-        }
-        /* Style for the GIF element */
-        #my-gif {
-            width: 80%;
-            max-width: 960px;
-            height: auto;
-            border-radius: 8px;
-            border: 2px solid #ccd6f6;
-        }
-        /* Container for the new boxes */
-        .boxes-container {
-            display: flex;
-            justify-content: center; /* Changed from space-around to bring boxes closer */
-            flex-wrap: wrap;
-            gap: 2rem;
-            width: 100%;
-            max-width: 1200px;
-        }
-        /* Styling for each box */
-        .info-box {
-            background-color: white;
-            border-radius: 8px;
-            width: 28%;
-            min-width: 250px;
-            height: 400px; /* Increased height from 300px */
-            padding: 1.5rem;
-            box-sizing: border-box;
-            color: #0a192f;
-        }
-        .info-box h3 {
-            font-family: 'Verdana', sans-serif;
-            font-weight: 300;
-            text-align: center;
-            margin-top: 0;
-        }
-        /* Footer styling */
-        footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 1rem 0;
-            color: #8892b0;
-            font-family: 'Verdana', sans-serif;
-            font-size: 0.8rem;
-            z-index: 1; /* Ensure footer is above background image */
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jonghwi Kim</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #0a192f;
+    }
+
+    /* --- Background image --- */
+    #background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('./my_image.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+    }
+
+    /* --- Particle canvas --- */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      transition: opacity 0.5s ease-out;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 2rem;
+    }
+
+    .title-section {
+      height: 100vh;
+    }
+
+    #about-section {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 5vh;
+      height: auto;
+    }
+
+    #subtitle {
+      font-family: 'Verdana', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: #ccd6f6;
+      font-weight: 300;
+      opacity: 1;
+      transition: opacity 0.5s ease-in;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .about-me-box {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 800px;
+      width: 90%;
+      box-sizing: border-box;
+    }
+
+    .about-me-text {
+      font-family: 'Verdana', sans-serif;
+      color: #0a192f;
+      font-weight: 300;
+      text-align: center;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      line-height: 1.6;
+      margin-top: 0;
+    }
+
+    .keywords-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .keyword-tag {
+      background-color: #e0e0e0;
+      color: #0a192f;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    #my-gif {
+      width: 80%;
+      max-width: 960px;
+      height: auto;
+      border-radius: 8px;
+      border: 2px solid #ccd6f6;
+      z-index: 1;
+    }
+
+    .boxes-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 5vh;
+    }
+
+    .info-box {
+      background-color: white;
+      border-radius: 8px;
+      width: 28%;
+      min-width: 250px;
+      height: 400px;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      color: #0a192f;
+    }
+
+    .info-box h3 {
+      font-family: 'Verdana', sans-serif;
+      font-weight: 300;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 1rem 0;
+      color: #8892b0;
+      font-family: 'Verdana', sans-serif;
+      font-size: 0.8rem;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
-    <!-- MOVED: Background image div is now the first element -->
-    <div id="background-image"></div>
-    <canvas id="particle-canvas"></canvas>
+  <div id="background-image"></div>
+  <canvas id="particle-canvas"></canvas>
 
+  <main>
     <!-- GIF section -->
-    <div class="content-section">
-        <img id="my-gif" src="./particle_formation.gif" alt="Particle formation animation">
+    <div class="content-section title-section">
+      <img id="my-gif" src="./particle_formation.gif" alt="Particle formation animation" />
     </div>
 
     <!-- Combined Subtitle and Boxes Section -->
     <div id="about-section" class="content-section">
-        <h2 id="subtitle">Hi, I'm a student interested in chemistry. Here is my portfolio.</h2>
-        <div class="boxes-container">
-            <div class="info-box">
-                <h3>computational chemistry</h3>
-            </div>
-            <div class="info-box">
-                <h3>nano &amp; inorganic chemistry</h3>
-            </div>
-            <div class="info-box">
-                <h3>programming</h3>
-            </div>
+      <h2 id="subtitle">
+        Hi, I'm a 17-year old student interested in chemistry and computer science. Here is my portfolio.
+      </h2>
+
+      <div class="about-me-box">
+        <p class="about-me-text">
+          My name is Jonghwi Kim, currently a student from Korea Science Academy of KAIST. I am learning chemistry
+          and computer science, physics and material science. I wish to compute and both create synthetic materials
+          using chemical engineering and computer science. I wish to learn and have both experienced the keywords below.
+        </p>
+        <div class="keywords-container">
+          <span class="keyword-tag">LAMMPS & Molecular dynamics</span>
+          <span class="keyword-tag">Metal organic frameworks(MOFs) and inorganic chemistry</span>
+          <span class="keyword-tag">Python(data organization) & JavaScript</span>
+          <span class="keyword-tag">Gaussian, Gaussview & ORCA: molecular level computational chemistry</span>
+          <span class="keyword-tag">Nanoparticle synthesis using electrodeposition(CV, LSV, etc)</span>
+          <span class="keyword-tag">Electrochemistry and sensor chemistry(click chemistry)</span>
         </div>
+      </div>
+
+      <div class="boxes-container">
+        <div class="info-box"><h3>LAMMPS &amp; Molecular dynamics</h3></div>
+        <div class="info-box"><h3>Metal organic frameworks(MOFs) and inorganic chemistry</h3></div>
+        <div class="info-box"><h3>Python(data organization) &amp; JavaScript</h3></div>
+        <div class="info-box"><h3>Gaussian, Gaussview &amp; ORCA</h3></div>
+        <div class="info-box"><h3>Nanoparticle synthesis using electrodeposition</h3></div>
+        <div class="info-box"><h3>Electrochemistry and sensor chemistry</h3></div>
+      </div>
     </div>
+  </main>
 
-    <!-- Footer Section is now part of the body's absolute positioning -->
-    <footer>
-        <p>kimhwi097@gmail.com | 24-022@ksa.hs.kr</p>
-    </footer>
+  <footer>
+    <p>kimhwi097@gmail.com | 24-022@ksa.hs.kr</p>
+  </footer>
 
-    <script>
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        const subtitle = document.getElementById('subtitle');
-        // Get a reference to the background image element
-        const bgImage = document.getElementById('background-image');
+  <script>
+    const canvas = document.getElementById("particle-canvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const subtitle = document.getElementById("subtitle");
+    const bgImage = document.getElementById("background-image");
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        let particlesArray = [];
-        const mouse = {
-            x: null,
-            y: null,
-            radius: 100 // The area of effect around the mouse
-        };
+    let particlesArray = [];
+    const mouse = { x: null, y: null, radius: 100 };
 
-        // Handle mouse movement
-        window.addEventListener('mousemove', (event) => {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
+    window.addEventListener("mousemove", (event) => {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
 
-        // Handle scroll events
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.scrollY;
-            const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
-            // --- ADDED: Logic for background image fade-in ---
-            if (pageHeight > 0) {
-                let opacity = scrollPosition / pageHeight;
-                // Removed the "* 1.5" multiplier for a more gradual fade
-                bgImage.style.opacity = Math.min(opacity, 1); 
-            }
+    function handleScroll() {
+      const scrollPosition = window.scrollY;
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (pageHeight > 0) {
+        const opacity = scrollPosition / pageHeight;
+        bgImage.style.opacity = Math.min(opacity * 0.7, 1);
+      }
+      const rect = subtitle.getBoundingClientRect();
+      subtitle.style.opacity =
+        rect.top < window.innerHeight * 0.75 && rect.bottom > 0 ? "1" : "0";
+      // fade out particles when scrolling past top
+      const scrollThreshold = window.innerHeight * 0.1;
+      canvas.style.opacity = scrollPosition > scrollThreshold ? "0" : "1";
+    }
 
-            // Fade out canvas as user scrolls down
-            const scrollThreshold = window.innerHeight * 0.1;
-            if (scrollPosition > scrollThreshold) {
-                canvas.style.opacity = '0';
-            } else {
-                canvas.style.opacity = '1';
-            }
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = 1.0;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = Math.random() * 30 + 1;
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+      update() {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        let maxDistance = mouse.radius;
+        let force = (maxDistance - distance) / maxDistance;
+        if (force < 0) force = 0;
+        let directionX = forceDirectionX * force * this.density;
+        let directionY = forceDirectionY * force * this.density;
 
-            // Fade in subtitle when its section is in view
-            const rect = subtitle.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.75 && rect.bottom > 0) {
-                subtitle.style.opacity = '1';
-            } else {
-                subtitle.style.opacity = '0';
-            }
-        });
-
-        // Particle class
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = 1.0; // Make particles smaller (was 2.0)
-                this.baseX = this.x; // Original X position
-                this.baseY = this.y; // Original Y position
-                this.density = (Math.random() * 30) + 1; // How fast it reacts
-            }
-
-            // Draw the particle
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-
-            // Update particle position based on mouse
-            update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                
-                // Calculate the force to apply
-                let force = (maxDistance - distance) / maxDistance;
-                if (force < 0) force = 0;
-
-                let directionX = (forceDirectionX * force * this.density);
-                let directionY = (forceDirectionY * force * this.density);
-
-                if (distance < mouse.radius) {
-                    // Repel from mouse
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    // Return to base position
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
-                }
-            }
+        if (distance < mouse.radius) {
+          this.x -= directionX;
+          this.y -= directionY;
+        } else {
+          if (this.x !== this.baseX) {
+            let dx = this.x - this.baseX;
+            this.x -= dx / 10;
+          }
+          if (this.y !== this.baseY) {
+            let dy = this.y - this.baseY;
+            this.y -= dy / 10;
+          }
         }
+      }
+    }
 
-        // Function to create particles from text
-        function init() {
-            particlesArray = [];
-            const text = "Jonghwi Kim";
-            const fontSize = Math.min(canvas.width / 10, 120);
-            
-            ctx.fillStyle = 'white'; // Color doesn't matter, we just need pixel data
-            ctx.font = `bold ${fontSize}px 'Verdana'`; // Use a clearer font
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            // Shifted the title up even more
-            ctx.fillText(text, canvas.width / 2, canvas.height / 5);
-
-            const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the text after scanning
-            
-            // Scan the image data and create particles
-            // Decreased step from 6 to 3 to make particle cloud denser
-            for (let y = 0; y < textCoordinates.height; y += 3) {
-                for (let x = 0; x < textCoordinates.width; x += 3) {
-                    if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
-                        const color = "#ccd6f6"; // Set all particles to a single color
-                        particlesArray.push(new Particle(x, y, color));
-                    }
-                }
-            }
+    function init() {
+      particlesArray = [];
+      const text = "Jonghwi Kim";
+      const fontSize = Math.min(canvas.width / 10, 120);
+      ctx.fillStyle = "white";
+      ctx.font = `bold ${fontSize}px 'Verdana'`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 5);
+      const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < textCoordinates.height; y += 3) {
+        for (let x = 0; x < textCoordinates.width; x += 3) {
+          // --- CORRECTED CODE BLOCK ---
+          if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
+            const color = "#ccd6f6";
+            particlesArray.push(new Particle(x, y, color));
+          }
         }
+      }
+    }
 
-        // --- CORRECTED CODE BLOCK ---
-        // Animation loop
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].draw();
-                particlesArray[i].update();
-            }
-            requestAnimationFrame(animate);
-        }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].draw();
+        particlesArray[i].update();
+      }
+      requestAnimationFrame(animate);
+    }
 
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init(); // Re-initialize particles on resize
-        });
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
 
-        // Start the animation
-        init();
-        animate();
-    </script>
+    init();
+    animate();
+  </script>
 </body>
 </html>
