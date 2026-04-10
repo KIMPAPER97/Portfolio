@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jonghwi Kim — Computational Chemist & Developer</title>
+  <meta name="description" content="Portfolio of Jonghwi Kim — Computational Chemistry, Molecular Dynamics, Electrochemistry, and Software Development." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ========================================
+       CSS CUSTOM PROPERTIES
+    ======================================== */
+    :root {
+      --bg-primary: #050510;
+      --bg-secondary: #0a0a1a;
+      --bg-card: rgba(255,255,255,0.03);
+      --bg-card-hover: rgba(255,255,255,0.06);
+      --bg-glass: rgba(255,255,255,0.05);
+      --border-glass: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888aa;
+      --text-muted: #555577;
+      --accent: #6c63ff;
+      --accent-glow: rgba(108,99,255,0.3);
+      --accent-2: #00d4aa;
+      --accent-3: #ff6b9d;
+      --accent-4: #ffd93d;
+      --gradient-1: linear-gradient(135deg, #6c63ff, #00d4aa);
+      --gradient-2: linear-gradient(135deg, #ff6b9d, #ffd93d);
+      --gradient-3: linear-gradient(135deg, #6c63ff, #ff6b9d);
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========================================
+       RESET & BASE
+    ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    ::selection {
+      background: var(--accent);
+      color: #fff;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ========================================
+       SCROLLBAR
+    ======================================== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ========================================
+       CURSOR GLOW (Desktop)
+    ======================================== */
+    .cursor-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      background: radial-gradient(circle, rgba(108,99,255,0.06) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      mix-blend-mode: screen;
+    }
+
+    /* ========================================
+       NOISE OVERLAY
+    ======================================== */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ========================================
+       NAVIGATION
+    ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5,5,16,0.7);
+      border-bottom: 1px solid var(--border-glass);
+      transition: transform var(--transition), background var(--transition);
+    }
+    .nav.hidden { transform: translateY(-100%); }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+      position: relative;
+      letter-spacing: 0.02em;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      transition: width var(--transition);
+      border-radius: 1px;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    /* ========================================
+       HERO SECTION
+    ======================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 2rem;
+    }
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,170,0.6); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0,212,170,0); }
+    }
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      visibility: hidden;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      font-weight: 300;
+      max-width: 650px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-tagline strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: none;
+      letter-spacing: 0.01em;
+    }
+    .btn-primary {
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-glass);
+      backdrop-filter: blur(10px);
+    }
+    .btn-ghost:hover {
+      background: var(--bg-glass);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: float 3s ease-in-out infinite;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scroll-line 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+    @keyframes scroll-line {
+      0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* Floating orbs in hero */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 400px; height: 400px;
+      background: var(--accent);
+      top: 10%; left: -10%;
+    }
+    .hero-orb-2 {
+      width: 350px; height: 350px;
+      background: var(--accent-2);
+      bottom: 10%; right: -5%;
+    }
+    .hero-orb-3 {
+      width: 250px; height: 250px;
+      background: var(--accent-3);
+      top: 50%; left: 50%;
+    }
+
+    /* ========================================
+       SECTION UTILITY
+    ======================================== */
+    .section {
+      position: relative;
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-glass), transparent);
+      margin: 0 auto;
+      max-width: 1400px;
+    }
+
+    /* ========================================
+       ABOUT SECTION
+    ======================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr 1fr;
+      gap: 3rem;
+      margin-top: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+    .about-text p strong { color: var(--text-primary); font-weight: 500; }
+
+    /* Profile Image */
+    .about-image-frame {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      border: 1px solid var(--border-glass);
+      box-shadow: 0 0 40px rgba(108,99,255,0.15), 0 0 80px rgba(108,99,255,0.05);
+    }
+    .about-image-frame::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: var(--gradient-1);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .about-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter 0.5s ease;
+    }
+    .about-image-frame:hover img {
+      filter: grayscale(0%) contrast(1.1);
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      transition: all var(--transition);
+    }
+    .stat-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ========================================
+       SKILLS MARQUEE
+    ======================================== */
+    .skills-marquee-wrapper {
+      overflow: hidden;
+      padding: 3rem 0;
+      position: relative;
+    }
+    .skills-marquee-wrapper::before,
+    .skills-marquee-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 150px;
+      height: 100%;
+      z-index: 2;
+    }
+    .skills-marquee-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-primary), transparent);
+    }
+    .skills-marquee-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-primary), transparent);
+    }
+    .skills-marquee {
+      display: flex;
+      gap: 1.5rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .skills-marquee:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .skill-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1.3rem;
+      border-radius: 50px;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .skill-chip:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+    }
+    .skill-chip i {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ========================================
+       FEATURED PROJECT (Large Card)
+    ======================================== */
+    .featured-project {
+      margin-top: 4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: all var(--transition-slow);
+      position: relative;
+    }
+    .featured-project:hover {
+      border-color: rgba(108,99,255,0.3);
+      box-shadow: 0 20px 60px rgba(108,99,255,0.1);
+    }
+    .featured-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 500px;
+    }
+    .featured-media {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(0,212,170,0.1));
+    }
+    .featured-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .featured-media .media-placeholder {
+      font-size: 5rem;
+      opacity: 0.2;
+    }
+    .featured-info {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    .featured-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .featured-desc {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+    .featured-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 50px;
+      border: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ========================================
+       PROJECTS GRID
+    ======================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: default;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-1);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .project-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(108,99,255,0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    .project-icon.purple { background: rgba(108,99,255,0.1); color: var(--accent); }
+    .project-icon.green { background: rgba(0,212,170,0.1); color: var(--accent-2); }
+    .project-icon.pink { background: rgba(255,107,157,0.1); color: var(--accent-3); }
+    .project-icon.yellow { background: rgba(255,217,61,0.1); color: var(--accent-4); }
+
+    .project-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .project-card p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      flex: 1;
+    }
+    .project-card .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+    }
+
+    /* ========================================
+       EXPERIENCE TIMELINE
+    ======================================== */
+    .timeline {
+      margin-top: 4rem;
+      position: relative;
+      padding-left: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 3rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .timeline-date {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-org {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    .timeline-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    /* ========================================
+       PUBLICATIONS
+    ======================================== */
+    .pub-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-top: 2rem;
+      transition: all var(--transition);
+    }
+    .pub-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(108,99,255,0.2);
+      transform: translateY(-2px);
+    }
+    .pub-type {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 0.5rem;
+    }
+    .pub-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .pub-meta {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    .pub-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* ========================================
+       CONTACT SECTION
+    ======================================== */
+    .contact-section {
+      text-align: center;
+      padding: 10rem 2rem;
+    }
+    .contact-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .contact-text {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108,99,255,0.15);
+    }
+
+    /* ========================================
+       FOOTER
+    ======================================== */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .footer span {
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* ========================================
+       RESPONSIVE
+    ======================================== */
+    @media (max-width: 1024px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-inner { grid-template-columns: 1fr; }
+      .featured-media { min-height: 300px; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-image-frame { max-width: 240px; margin: 0 auto; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 5rem 1.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        background: rgba(5,5,16,0.96);
+        backdrop-filter: blur(20px);
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 999;
+      }
+      .nav-links.open a { font-size: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .hero-name { font-size: 2.8rem; visibility: hidden; }
+      .about-stats { grid-template-columns: 1fr; }
+    }
+
+    /* ========================================
+       REVEAL ANIMATIONS (GSAP targets)
+    ======================================== */
+    .reveal { opacity: 0; transform: translateY(40px); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); }
+    .reveal-right { opacity: 0; transform: translateX(40px); }
+    .reveal-scale { opacity: 0; transform: scale(0.95); }
+
+    /* ========================================
+       VIDEO MODAL
+    ======================================== */
+    .video-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10001;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .video-modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .video-modal-content {
+      max-width: 900px;
+      width: 90%;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-glass);
+    }
+    .video-modal-content video {
+      width: 100%;
+      display: block;
+    }
+    .video-modal-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+    .video-modal-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ========================================
+       GRID BACKGROUND
+    ======================================== */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.03;
+      background-image:
+        linear-gradient(var(--text-muted) 1px, transparent 1px),
+        linear-gradient(90deg, var(--text-muted) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    }
+
+    /* ========================================
+       BENTO GRID LAYOUT (for skills)
+    ======================================== */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(180px, auto);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .bento-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(108,99,255,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+    .bento-card.span-2 { grid-column: span 2; }
+    .bento-card.span-row-2 { grid-row: span 2; }
+    .bento-card .bento-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+    .bento-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .bento-card p {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+    .bento-bg-glow {
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity var(--transition-slow);
+      pointer-events: none;
+    }
+    .bento-card:hover .bento-bg-glow { opacity: 1; }
+
+    @media (max-width: 1024px) {
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-card.span-2 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Video Modal -->
+  <div class="video-modal-overlay" id="videoModal">
+    <button class="video-modal-close" id="videoModalClose">&times;</button>
+    <div class="video-modal-content">
+      <video id="modalVideo" controls>
+        <source src="./particle_formation.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <nav class="nav" id="mainNav">
+    <a href="#" class="nav-logo">JK.</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" role="button" tabindex="0" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-badge reveal-scale">
+        <span class="dot"></span>
+        Korea Science Academy of KAIST &middot; Class of 2027
+      </div>
+      <h1 class="hero-name">Jonghwi Kim</h1>
+      <p class="hero-tagline">
+        Bridging <strong>computational chemistry</strong> and <strong>software engineering</strong> — from molecular dynamics simulations to electrochemical nanostructures.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <i data-lucide="layers"></i> View Projects
+        </a>
+        <button class="btn btn-ghost" id="watchDemoBtn">
+          <i data-lucide="play"></i> Watch LAMMPS Demo
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ==================== SKILLS MARQUEE ==================== -->
+  <div class="skills-marquee-wrapper">
+    <div class="skills-marquee" id="marquee1">
+      <div class="skill-chip"><i data-lucide="atom"></i> LAMMPS</div>
+      <div class="skill-chip"><i data-lucide="flask-conical"></i> Gaussian</div>
+      <div class="skill-chip"><i data-lucide="code-2"></i> Python</div>
+      <div class="skill-chip"><i data-lucide="zap"></i> Electrochemistry</div>
+      <div class="skill-chip"><i data-lucide="database"></i> Quantum Espresso</div>
+      <div class="skill-chip"><i data-lucide="box"></i> ORCA</div>
+      <div class="skill-chip"><i data-lucide="bar-chart-3"></i> Matplotlib</div>
+      <div class="skill-chip"><i data-lucide="globe"></i> JavaScript</div>
+      <div class="skill-chip"><i data-lucide="cpu"></i> GaussView</div>
+      <div class="skill-chip"><i data-lucide="layers"></i> Blender</div>
+      <div class="skill-chip"><i data-lucide="flask-round"></i> OVITO</div>
+      <div class="skill-chip"><i data-lucide="file-code-2"></i> LaTeX</div>
+      <div class="skill-chip"><i data-lucide="terminal"></i> NumPy</div>
+      <div class="skill-chip"><i data-lucide="boxes"></i> ReaxFF</div>
+      <div class="skill-chip"><i data-lucide="microscope"></i> TheoDORE</div>
+      <div class="skill-chip"><i data-lucide="beaker"></i> ESPResSo</div>
+      <!-- duplicated for seamless loop -->
+      <div class="skill-chip"><i data-lucide="atom"></i> LAMMPS</div>
+      <div class="skill-chip"><i data-lucide="flask-conical"></i> Gaussian</div>
+      <div class="skill-chip"><i data-lucide="code-2"></i> Python</div>
+      <div class="skill-chip"><i data-lucide="zap"></i> Electrochemistry</div>
+      <div class="skill-chip"><i data-lucide="database"></i> Quantum Espresso</div>
+      <div class="skill-chip"><i data-lucide="box"></i> ORCA</div>
+      <div class="skill-chip"><i data-lucide="bar-chart-3"></i> Matplotlib</div>
+      <div class="skill-chip"><i data-lucide="globe"></i> JavaScript</div>
+      <div class="skill-chip"><i data-lucide="cpu"></i> GaussView</div>
+      <div class="skill-chip"><i data-lucide="layers"></i> Blender</div>
+      <div class="skill-chip"><i data-lucide="flask-round"></i> OVITO</div>
+      <div class="skill-chip"><i data-lucide="file-code-2"></i> LaTeX</div>
+      <div class="skill-chip"><i data-lucide="terminal"></i> NumPy</div>
+      <div class="skill-chip"><i data-lucide="boxes"></i> ReaxFF</div>
+      <div class="skill-chip"><i data-lucide="microscope"></i> TheoDORE</div>
+      <div class="skill-chip"><i data-lucide="beaker"></i> ESPResSo</div>
+    </div>
+  </div>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section class="section" id="about">
+    <div class="grid-bg"></div>
+    <div class="section-label reveal">01 &mdash; About</div>
+    <h2 class="section-title reveal">Designing matter<br>at the atomic scale.</h2>
+
+    <div class="about-grid">
+      <div class="about-image reveal">
+        <div class="about-image-frame">
+          <img src="my_image.jpg" alt="Jonghwi Kim" loading="lazy" />
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="reveal">
+          I'm <strong>Jonghwi Kim</strong>, a student at <strong>Korea Science Academy of KAIST</strong> 
+          with a deep passion for understanding and engineering materials from the ground up — atom by atom, 
+          electron by electron.
+        </p>
+        <p class="reveal">
+          My work spans <strong>molecular dynamics simulations</strong> using LAMMPS with potentials 
+          ranging from Lennard-Jones to machine-learned force fields, <strong>electrochemical nanostructure synthesis</strong> 
+          through cyclic voltammetry and electrodeposition, and <strong>quantum chemical calculations</strong> 
+          with Gaussian, ORCA, and Quantum Espresso.
+        </p>
+        <p class="reveal">
+          I also build custom tools — from <strong>Python finite-difference solvers</strong> for 
+          Butler-Volmer kinetics to <strong>Blender plugins</strong> for 3D trajectory visualization 
+          and <strong>interactive web applications</strong> for science communication.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card reveal">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Python Scripts & Simulations</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">LAMMPS MD Projects</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">8+</div>
+          <div class="stat-label">Academic Publications & Papers</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Computational Tools Mastered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ==================== SKILLS BENTO ==================== -->
+  <section class="section" id="skills">
+    <div class="section-label reveal">02 &mdash; Skills & Tools</div>
+    <h2 class="section-title reveal">My computational<br>toolkit.</h2>
+    <p class="section-subtitle reveal">
+      From quantum mechanics to web development — the tools I use to solve problems across scales.
+    </p>
+
+    <div class="bento-grid">
+      <div class="bento-card span-2 reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(108,99,255,0.08), transparent 60%)"></div>
+        <div class="bento-icon">⚛️</div>
+        <h4>Molecular Dynamics</h4>
+        <p>LAMMPS simulations with BKS, Lennard-Jones, CHARMM, AMBER, OPLS, ReaxFF, and ML potentials. NVT/NPT ensembles, thermal studies, phase transitions, and coarse-grained modeling.</p>
+      </div>
+      <div class="bento-card reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(0,212,170,0.08), transparent 60%)"></div>
+        <div class="bento-icon">🧪</div>
+        <h4>Quantum Chemistry</h4>
+        <p>Gaussian, GaussView, ORCA, Quantum Espresso. DFT, electronic structure, excited states.</p>
+      </div>
+      <div class="bento-card reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(255,107,157,0.08), transparent 60%)"></div>
+        <div class="bento-icon">⚡</div>
+        <h4>Electrochemistry</h4>
+        <p>Cyclic voltammetry, electrodeposition, Butler-Volmer kinetics, Scharifker-Hills nucleation theory.</p>
+      </div>
+      <div class="bento-card reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(255,217,61,0.08), transparent 60%)"></div>
+        <div class="bento-icon">🐍</div>
+        <h4>Python</h4>
+        <p>NumPy, Matplotlib, SciPy for numerical simulation, data analysis, and scientific visualization.</p>
+      </div>
+      <div class="bento-card reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(108,99,255,0.08), transparent 60%)"></div>
+        <div class="bento-icon">🌐</div>
+        <h4>Web Development</h4>
+        <p>HTML5, CSS3, JavaScript, Canvas API. Building interactive visualizations and portfolio sites.</p>
+      </div>
+      <div class="bento-card span-2 reveal">
+        <div class="bento-bg-glow" style="background: radial-gradient(circle, rgba(0,212,170,0.08), transparent 60%)"></div>
+        <div class="bento-icon">🔬</div>
+        <h4>Visualization & Analysis</h4>
+        <p>Blender 4.0 for trajectory rendering, OVITO for atomic visualization, TheoDORE for excited-state analysis, and custom Python plotting pipelines. From raw simulation data to publication-ready figures.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ==================== FEATURED PROJECT ==================== -->
+  <section class="section" id="projects">
+    <div class="grid-bg"></div>
+    <div class="section-label reveal">03 &mdash; Projects</div>
+    <h2 class="section-title reveal">Selected work.</h2>
+    <p class="section-subtitle reveal">
+      A curated selection of research projects, simulations, and tools I've built.
+    </p>
+
+    <!-- Featured: Cu2O Electrodeposition -->
+    <div class="featured-project reveal-scale">
+      <div class="featured-inner">
+        <div class="featured-media">
+          <video autoplay loop muted playsinline>
+            <source src="./particle_formation.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="featured-info">
+          <div class="featured-tag">Featured &mdash; R&amp;E Project</div>
+          <h3 class="featured-title">Cu&#8322;O Nanoparticle Electrodeposition Simulation</h3>
+          <p class="featured-desc">
+            Comprehensive computational study of cuprous oxide electrodeposition from CuSO&#8324;/NaCl electrolytes. 
+            Integrates finite-difference diffusion solvers for Fick's Second Law, Butler-Volmer electrode kinetics, 
+            Scharifker-Hills nucleation theory, and Langmuir adsorption. Simulates a three-electrode cell with 
+            5 mM CuSO&#8324; at 328 K (55 &#176;C), pH 9.0, 50 mV/s scan rate across 5 CV cycles.
+          </p>
+          <div class="featured-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">LAMMPS</span>
+            <span class="tech-tag">Butler-Volmer</span>
+            <span class="tech-tag">Fick's Law</span>
+            <span class="tech-tag">NumPy</span>
+            <span class="tech-tag">Matplotlib</span>
+          </div>
+          <div>
+            <span style="font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono);">
+              Cu&#178;&#8314; + e&#8315; &#8594; Cu&#8314; &nbsp;|&nbsp; 2Cu&#8314; + H&#8322;O &#8594; Cu&#8322;O + 2H&#8314;
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="projects-grid" style="margin-top: 3rem;">
+
+      <!-- MD Potentials Review -->
+      <div class="project-card reveal">
+        <div class="project-icon purple"><i data-lucide="book-open"></i></div>
+        <h3>Comprehensive Review of MD Potentials</h3>
+        <p>
+          Academic paper surveying the evolution from Lennard-Jones pairwise interactions to modern 
+          machine-learned force fields (DeepMD, neural network potentials). Covers CHARMM, AMBER, OPLS, 
+          ReaxFF, AMOEBA, and PCFF with trade-off analysis of accuracy vs. computational cost.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">LaTeX</span>
+          <span class="tech-tag">LAMMPS</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">agents4science 2025</span>
+        </div>
+      </div>
+
+      <!-- IChTO Problem 11 -->
+      <div class="project-card reveal">
+        <div class="project-icon green"><i data-lucide="droplets"></i></div>
+        <h3>Microplastics Removal via Chitosan Flocculation</h3>
+        <p>
+          IChTO Problem 11 — Designed a chitosan coagulation-flocculation system to reduce micro- 
+          and nanoplastics in seaweed soup. Modeled polyethylene-chitosan interactions 
+          with LAMMPS molecular dynamics and quantified aggregation kinetics.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">LAMMPS</span>
+          <span class="tech-tag">LaTeX Beamer</span>
+          <span class="tech-tag">Coarse-Grained MD</span>
+        </div>
+      </div>
+
+      <!-- IChTO Problem 12 -->
+      <div class="project-card reveal">
+        <div class="project-icon pink"><i data-lucide="cookie"></i></div>
+        <h3>Restoring Crispiness in Soggy Chips</h3>
+        <p>
+          IChTO Problem 12 — Ethanol-based moisture displacement from starch matrix. Coarse-grained 
+          LAMMPS simulation modeling water displacement: ethanol-water interactions outcompete 
+          starch-water bonds, drawing moisture out and restoring the glassy crispy state.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">LAMMPS</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">RDF Analysis</span>
+          <span class="tech-tag">MSD</span>
+        </div>
+      </div>
+
+      <!-- SiO2 MD -->
+      <div class="project-card reveal">
+        <div class="project-icon yellow"><i data-lucide="flame"></i></div>
+        <h3>Amorphous SiO&#8322; Thermal Dynamics</h3>
+        <p>
+          Molecular dynamics simulations of amorphous silica using BKS potentials (Buckingham + Coulomb). 
+          Temperature ramping from 300 K to 2000 K with NVT ensemble, studying thermal expansion, 
+          structural transitions, and radial distribution functions.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">LAMMPS</span>
+          <span class="tech-tag">BKS Potential</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">OVITO</span>
+        </div>
+      </div>
+
+      <!-- Blender Plugin -->
+      <div class="project-card reveal">
+        <div class="project-icon purple"><i data-lucide="box"></i></div>
+        <h3>LAMMPS &#8594; Blender 3D Visualization</h3>
+        <p>
+          Custom Python plugin for Blender 4.x that imports LAMMPS trajectory dump files 
+          and converts atomic coordinates into animated 3D spheres with automatic material 
+          assignment per atom type. Supports large trajectory files for cinematic renders.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Blender</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">LAMMPS</span>
+        </div>
+      </div>
+
+      <!-- Electroanalytical Chemistry -->
+      <div class="project-card reveal">
+        <div class="project-icon green"><i data-lucide="activity"></i></div>
+        <h3>Iron Electroanalysis via Cyclic Voltammetry</h3>
+        <p>
+          Experimental electrochemistry project — quantified iron concentrations using CV with 
+          6-point calibration (10 mM standard at variable dilutions). Analyzed oxidation/reduction 
+          peaks across 4 unknown samples with method validation per SOP.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">CV</span>
+          <span class="tech-tag">Model 700E</span>
+          <span class="tech-tag">Calibration</span>
+          <span class="tech-tag">Excel</span>
+        </div>
+      </div>
+
+      <!-- Sea Temperature -->
+      <div class="project-card reveal">
+        <div class="project-icon pink"><i data-lucide="thermometer"></i></div>
+        <h3>Korean Sea Temperature Trend Analysis</h3>
+        <p>
+          Comparative analysis of vertical water temperature profiles across East Sea, South Sea, 
+          and West Sea (2012 vs. 2024). Python-based visualization of depth-dependent stratification, 
+          seasonal variation (6.86&#8211;29.8 &#176;C), and long-term climate trends.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Matplotlib</span>
+          <span class="tech-tag">Climate Data</span>
+        </div>
+      </div>
+
+      <!-- Graduation Research -->
+      <div class="project-card reveal">
+        <div class="project-icon yellow"><i data-lucide="graduation-cap"></i></div>
+        <h3>Graduation Research — Nano-Biosensors</h3>
+        <p>
+          Capstone project focused on electrochemical nano-roughening and gold nanostructure synthesis 
+          for biosensor applications. Investigating nanoporous gold electrodes, aptamer-based detection, 
+          and surface area enhancement through controlled electrodeposition.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Electrochemistry</span>
+          <span class="tech-tag">Gold Nanostructures</span>
+          <span class="tech-tag">Biosensors</span>
+        </div>
+      </div>
+
+      <!-- Forensic Science -->
+      <div class="project-card reveal">
+        <div class="project-icon purple"><i data-lucide="heart-pulse"></i></div>
+        <h3>Forensic Heart Rate Simulation</h3>
+        <p>
+          Real-time heart rate monitor simulation with dual-transition BPM modeling — resting 
+          to excited to flatline. Features Gaussian noise with configurable &#963; for realistic 
+          physiological variation and terminal-style visualization.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">NumPy</span>
+          <span class="tech-tag">Matplotlib</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ==================== EXPERIENCE TIMELINE ==================== -->
+  <section class="section" id="experience">
+    <div class="section-label reveal">04 &mdash; Experience</div>
+    <h2 class="section-title reveal">Journey so far.</h2>
+
+    <div class="timeline">
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2026 — Present</div>
+        <div class="timeline-title">Graduation Research — Electrochemical Nano-Biosensors</div>
+        <div class="timeline-org">Korea Science Academy of KAIST</div>
+        <div class="timeline-desc">
+          Capstone research project investigating gold nanostructure synthesis via electrochemical 
+          nano-roughening for high-sensitivity biosensor applications. Building on Cu&#8322;O electrodeposition 
+          expertise to create nanoporous gold electrodes with enhanced surface area.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2025 — 2026</div>
+        <div class="timeline-title">R&amp;E Chemistry 06 — Cu&#8322;O Electrodeposition</div>
+        <div class="timeline-org">Korea Science Academy of KAIST &#183; Research &amp; Education Program</div>
+        <div class="timeline-desc">
+          Year-long research project combining computational simulation (LAMMPS + Python) with 
+          electrochemical theory. Developed a comprehensive finite-difference CV simulation and 
+          submitted to KSEF 2026 national competition.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">Winter 2025</div>
+        <div class="timeline-title">Hong Kong Global Talent Conclave (GTC)</div>
+        <div class="timeline-org">International Science Delegation</div>
+        <div class="timeline-desc">
+          Selected as KSA representative for the international talent showcase conference. 
+          Presented research in computational chemistry and engaged with global STEM peers.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2025</div>
+        <div class="timeline-title">IChTO — International Chemistry Tournament Olympiad</div>
+        <div class="timeline-org">International Chemistry Competition</div>
+        <div class="timeline-desc">
+          Solved two competition problems using LAMMPS molecular dynamics: chitosan-based 
+          microplastic removal and ethanol-based starch moisture displacement. Created LaTeX 
+          Beamer presentations with computational evidence for each solution.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2025</div>
+        <div class="timeline-title">agents4science Paper — MD Potentials Review</div>
+        <div class="timeline-org">Submitted to agents4science 2025 Workshop</div>
+        <div class="timeline-desc">
+          Authored a comprehensive review paper on the evolution of molecular dynamics potentials, 
+          from classical pairwise methods to machine-learned force fields. Covered theoretical 
+          foundations, software implementations, and trade-off comparisons.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2025</div>
+        <div class="timeline-title">Research Connect — KSA Journal Submission</div>
+        <div class="timeline-org">Korea Science Academy Research Journal</div>
+        <div class="timeline-desc">
+          Submitted research findings to the KSA peer-reviewed student journal. 
+          Prepared bilingual (Korean/English) manuscripts following academic formatting guidelines.
+        </div>
+      </div>
+
+      <div class="timeline-item reveal-left">
+        <div class="timeline-date">2024 — Present</div>
+        <div class="timeline-title">Student — Korea Science Academy of KAIST</div>
+        <div class="timeline-org">Busan, South Korea</div>
+        <div class="timeline-desc">
+          Pursuing advanced studies in chemistry, physics, computer science, and materials science. 
+          Building expertise in computational methods, electrochemistry, and scientific software development.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ==================== PUBLICATIONS ==================== -->
+  <section class="section" id="publications">
+    <div class="section-label reveal">05 &mdash; Publications &amp; Presentations</div>
+    <h2 class="section-title reveal">Academic output.</h2>
+
+    <div class="pub-card reveal">
+      <div class="pub-type">Review Paper</div>
+      <div class="pub-title">Comprehensive Review of Molecular Dynamics Potentials</div>
+      <div class="pub-meta">agents4science 2025 Workshop &#183; Jonghwi Kim</div>
+      <div class="pub-desc">
+        Survey of MD potentials from pairwise Lennard-Jones to machine-learned neural network force fields. 
+        Analysis of CHARMM, AMBER, OPLS, ReaxFF, AMOEBA, PCFF with trade-off assessment across 
+        accuracy, computational cost, and transferability.
+      </div>
+    </div>
+
+    <div class="pub-card reveal">
+      <div class="pub-type">Research Paper</div>
+      <div class="pub-title">Computational Simulation of Cu&#8322;O Nanoparticle Electrodeposition via Cyclic Voltammetry</div>
+      <div class="pub-meta">KSA Research Connect Journal &#183; KSEF 2026 Submission &#183; Jonghwi Kim</div>
+      <div class="pub-desc">
+        Finite-difference numerical solver for coupled diffusion-kinetics during Cu&#8322;O electrodeposition. 
+        Implements Butler-Volmer kinetics, Scharifker-Hills nucleation theory, and Langmuir adsorption 
+        models for a three-electrode CuSO&#8324;/NaCl electrochemical cell.
+      </div>
+    </div>
+
+    <div class="pub-card reveal">
+      <div class="pub-type">Competition Presentations</div>
+      <div class="pub-title">IChTO — Chitosan Flocculation &amp; Ethanol Moisture Displacement</div>
+      <div class="pub-meta">International Chemistry Tournament Olympiad 2025</div>
+      <div class="pub-desc">
+        Two problem solutions backed by LAMMPS coarse-grained MD simulations: 
+        (1) Chitosan-based removal of PE microplastics from food systems, 
+        (2) Ethanol-mediated water displacement from starch polymer matrices with RDF, MSD, and density profile analysis.
+      </div>
+    </div>
+
+    <div class="pub-card reveal">
+      <div class="pub-type">Conference</div>
+      <div class="pub-title">Hong Kong Global Talent Conclave — Computational Chemistry Presentation</div>
+      <div class="pub-meta">Hong Kong GTC &#183; Winter 2025 &#183; KSA Representative</div>
+      <div class="pub-desc">
+        International presentation on computational chemistry research, molecular dynamics methodologies, 
+        and electrochemical simulation techniques to a global STEM audience.
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section class="contact-section" id="contact">
+    <div class="section-label reveal" style="justify-content:center;">06 &mdash; Contact</div>
+    <h2 class="contact-title reveal">Let's connect.</h2>
+    <p class="contact-text reveal">
+      Interested in collaboration, research opportunities, or just want to chat about 
+      computational chemistry? Reach out anytime.
+    </p>
+    <div class="contact-links reveal">
+      <a href="mailto:kimhwi097@gmail.com" class="contact-link">
+        <i data-lucide="mail"></i> kimhwi097@gmail.com
+      </a>
+      <a href="mailto:24-022@ksa.hs.kr" class="contact-link">
+        <i data-lucide="school"></i> 24-022@ksa.hs.kr
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <p>&copy; 2025 <span>Jonghwi Kim</span>. Built with curiosity and code.</p>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // ========================================
+    // LUCIDE ICONS
+    // ========================================
+    lucide.createIcons();
+
+    // ========================================
+    // CURSOR GLOW
+    // ========================================
+    const cursorGlow = document.getElementById('cursorGlow');
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+      });
+    } else {
+      cursorGlow.style.display = 'none';
+    }
+
+    // ========================================
+    // NAVBAR HIDE ON SCROLL DOWN
+    // ========================================
+    let lastScrollY = 0;
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        nav.classList.add('hidden');
+      } else {
+        nav.classList.remove('hidden');
+      }
+      lastScrollY = currentScrollY;
+    });
+
+    // ========================================
+    // HAMBURGER MENU
+    // ========================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ========================================
+    // VIDEO MODAL
+    // ========================================
+    const videoModal = document.getElementById('videoModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const watchBtn = document.getElementById('watchDemoBtn');
+    const videoClose = document.getElementById('videoModalClose');
+
+    watchBtn.addEventListener('click', () => {
+      videoModal.classList.add('active');
+      modalVideo.play();
+    });
+    videoClose.addEventListener('click', closeModal);
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeModal();
+    });
+    function closeModal() {
+      videoModal.classList.remove('active');
+      modalVideo.pause();
+      modalVideo.currentTime = 0;
+    }
+
+    // ========================================
+    // HERO PARTICLE TEXT CANVAS
+    // ========================================
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    let particlesArray = [];
+    const mouse = { x: null, y: null, radius: 120 };
+
+    const heroEl = document.getElementById('hero');
+
+    function resizeCanvas() {
+      canvas.width = heroEl.offsetWidth;
+      canvas.height = heroEl.offsetHeight;
+    }
+    resizeCanvas();
+
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = 1.2;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = Math.random() * 30 + 1;
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+      update() {
+        if (mouse.x === null || mouse.y === null) {
+          // Spring back when no mouse
+          if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 10; }
+          if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 10; }
+          return;
+        }
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        let maxDistance = mouse.radius;
+        let force = (maxDistance - distance) / maxDistance;
+        if (force < 0) force = 0;
+        let directionX = forceDirectionX * force * this.density;
+        let directionY = forceDirectionY * force * this.density;
+
+        if (distance < mouse.radius) {
+          this.x -= directionX;
+          this.y -= directionY;
+        } else {
+          if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 10; }
+          if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 10; }
+        }
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      // Calculate where the hidden h1 sits to align particles
+      const heroName = document.querySelector('.hero-name');
+      const heroRect = heroEl.getBoundingClientRect();
+      const nameRect = heroName.getBoundingClientRect();
+      const centerX = canvas.width / 2;
+      const centerY = (nameRect.top - heroRect.top) + nameRect.height / 2;
+
+      const text = 'Jonghwi Kim';
+      const fontSize = Math.min(canvas.width / 8, 140);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `800 ${fontSize}px "Space Grotesk", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, centerX, centerY);
+
+      const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const gap = 3;
+      for (let y = 0; y < textCoordinates.height; y += gap) {
+        for (let x = 0; x < textCoordinates.width; x += gap) {
+          if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
+            // Particle colors in accent purple-blue range
+            const hue = 240 + Math.random() * 30;
+            const sat = 60 + Math.random() * 30;
+            const lit = 70 + Math.random() * 20;
+            particlesArray.push(new Particle(x, y, `hsl(${hue}, ${sat}%, ${lit}%)`));
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].draw();
+        particlesArray[i].update();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+
+    // ========================================
+    // GSAP SCROLL ANIMATIONS
+    // ========================================
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    // Reveal animations
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          end: 'top 60%',
+          toggleActions: 'play none none reverse',
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    });
+
+    gsap.utils.toArray('.reveal-left').forEach(el => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    });
+
+    gsap.utils.toArray('.reveal-scale').forEach(el => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: 'power3.out',
+      });
+    });
+
+    // Hero entrance animation
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .from('.hero-badge', { opacity: 0, y: 20, duration: 0.6, delay: 0.3 })
+      .from('.hero-name', { opacity: 0, y: 40, duration: 0.8 }, '-=0.3')
+      .from('.hero-tagline', { opacity: 0, y: 30, duration: 0.7 }, '-=0.4')
+      .from('.hero-cta .btn', { opacity: 0, y: 20, duration: 0.5, stagger: 0.15 }, '-=0.3')
+      .from('.hero-scroll-indicator', { opacity: 0, duration: 0.6 }, '-=0.2');
+
+    // Parallax orbs
+    gsap.to('.hero-orb-1', {
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      y: -100,
+      x: 50,
+    });
+    gsap.to('.hero-orb-2', {
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      y: -80,
+      x: -30,
+    });
+    gsap.to('.hero-orb-3', {
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+      y: -120,
+    });
+
+    // Stagger project cards
+    ScrollTrigger.batch('.project-card', {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: 'power3.out',
+        });
+      },
+      start: 'top 85%',
+    });
+
+    // Stagger bento cards
+    ScrollTrigger.batch('.bento-card', {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power3.out',
+        });
+      },
+      start: 'top 85%',
+    });
+
+    // Stagger stat cards
+    ScrollTrigger.batch('.stat-card', {
+      onEnter: (batch) => {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: 'power3.out',
+        });
+      },
+      start: 'top 85%',
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          gsap.to(window, { scrollTo: { y: target, offsetY: 80 }, duration: 1, ease: 'power3.inOut' });
+        }
+      });
+    });
+
+    // ========================================
+    // COUNTER ANIMATION
+    // ========================================
+    gsap.utils.toArray('.stat-number').forEach(el => {
+      const target = parseInt(el.textContent);
+      const suffix = el.textContent.replace(/[0-9]/g, '');
+      el.textContent = '0' + suffix;
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to({ val: 0 }, {
+            val: target,
+            duration: 1.5,
+            ease: 'power2.out',
+            onUpdate: function () {
+              el.textContent = Math.round(this.targets()[0].val) + suffix;
+            },
+          });
+        },
+        once: true,
+      });
+    });
+  </script>
+</body>
+</html>

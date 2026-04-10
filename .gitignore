@@ -1,0 +1,15 @@
+# Backup/temp files
+index_backup.html
+index_new.html
+initial_particles.txt
+title_generation.txt
+
+# LAMMPS binary & data (too large for web)
+lmp.exe
+tmp.dump
+log.lammps
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
