@@ -10,15 +10,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
   <!-- GSAP + ScrollTrigger (deferred) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
 
-  <!-- Lucide Icons (deferred) -->
-  <script src="https://unpkg.com/lucide@0.263.1" defer></script>
+
 
   <style>
     /* ========================================
@@ -88,8 +88,8 @@
     ======================================== */
     .cursor-glow {
       position: fixed;
-      width: 600px;
-      height: 600px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
@@ -97,18 +97,6 @@
       transform: translate(-50%, -50%);
       transition: opacity 0.3s;
       mix-blend-mode: screen;
-    }
-
-    /* ========================================
-       NOISE OVERLAY
-    ======================================== */
-    .noise-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      pointer-events: none;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     }
 
     /* ========================================
@@ -196,6 +184,7 @@
       position: absolute;
       inset: 0;
       z-index: 0;
+      will-change: transform;
     }
     .hero-content {
       position: relative;
@@ -535,10 +524,6 @@
       border-color: var(--accent);
       color: var(--text-primary);
       background: var(--bg-card-hover);
-    }
-    .skill-chip i {
-      width: 18px;
-      height: 18px;
     }
 
     /* ========================================
@@ -1054,9 +1039,6 @@
   <!-- Cursor Glow -->
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <!-- Noise Overlay -->
-  <div class="noise-overlay"></div>
-
   <!-- Video Modal -->
   <div class="video-modal-overlay" id="videoModal">
     <button class="video-modal-close" id="videoModalClose">&times;</button>
@@ -1101,10 +1083,10 @@
       </p>
       <div class="hero-cta">
         <a href="#projects" class="btn btn-primary">
-          <i data-lucide="layers"></i> View Projects
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg> View Projects
         </a>
         <button class="btn btn-ghost" id="watchDemoBtn">
-          <i data-lucide="play"></i> Watch LAMMPS Demo
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg> Watch LAMMPS Demo
         </button>
       </div>
     </div>
@@ -1118,39 +1100,39 @@
   <!-- ==================== SKILLS MARQUEE ==================== -->
   <div class="skills-marquee-wrapper">
     <div class="skills-marquee" id="marquee1">
-      <div class="skill-chip"><i data-lucide="atom"></i> LAMMPS</div>
-      <div class="skill-chip"><i data-lucide="flask-conical"></i> Gaussian</div>
-      <div class="skill-chip"><i data-lucide="code-2"></i> Python</div>
-      <div class="skill-chip"><i data-lucide="zap"></i> Electrochemistry</div>
-      <div class="skill-chip"><i data-lucide="database"></i> Quantum Espresso</div>
-      <div class="skill-chip"><i data-lucide="box"></i> ORCA</div>
-      <div class="skill-chip"><i data-lucide="bar-chart-3"></i> Matplotlib</div>
-      <div class="skill-chip"><i data-lucide="globe"></i> JavaScript</div>
-      <div class="skill-chip"><i data-lucide="cpu"></i> GaussView</div>
-      <div class="skill-chip"><i data-lucide="layers"></i> Blender</div>
-      <div class="skill-chip"><i data-lucide="flask-round"></i> OVITO</div>
-      <div class="skill-chip"><i data-lucide="file-code-2"></i> LaTeX</div>
-      <div class="skill-chip"><i data-lucide="terminal"></i> NumPy</div>
-      <div class="skill-chip"><i data-lucide="boxes"></i> ReaxFF</div>
-      <div class="skill-chip"><i data-lucide="microscope"></i> TheoDORE</div>
-      <div class="skill-chip"><i data-lucide="beaker"></i> ESPResSo</div>
+      <div class="skill-chip">⚛️ LAMMPS</div>
+      <div class="skill-chip">🧪 Gaussian</div>
+      <div class="skill-chip">🐍 Python</div>
+      <div class="skill-chip">⚡ Electrochemistry</div>
+      <div class="skill-chip">💾 Quantum Espresso</div>
+      <div class="skill-chip">📦 ORCA</div>
+      <div class="skill-chip">📊 Matplotlib</div>
+      <div class="skill-chip">🌐 JavaScript</div>
+      <div class="skill-chip">🖥️ GaussView</div>
+      <div class="skill-chip">🎨 Blender</div>
+      <div class="skill-chip">🔬 OVITO</div>
+      <div class="skill-chip">📄 LaTeX</div>
+      <div class="skill-chip">▶️ NumPy</div>
+      <div class="skill-chip">📦 ReaxFF</div>
+      <div class="skill-chip">🔬 TheoDORE</div>
+      <div class="skill-chip">🧫 ESPResSo</div>
       <!-- duplicated for seamless loop -->
-      <div class="skill-chip"><i data-lucide="atom"></i> LAMMPS</div>
-      <div class="skill-chip"><i data-lucide="flask-conical"></i> Gaussian</div>
-      <div class="skill-chip"><i data-lucide="code-2"></i> Python</div>
-      <div class="skill-chip"><i data-lucide="zap"></i> Electrochemistry</div>
-      <div class="skill-chip"><i data-lucide="database"></i> Quantum Espresso</div>
-      <div class="skill-chip"><i data-lucide="box"></i> ORCA</div>
-      <div class="skill-chip"><i data-lucide="bar-chart-3"></i> Matplotlib</div>
-      <div class="skill-chip"><i data-lucide="globe"></i> JavaScript</div>
-      <div class="skill-chip"><i data-lucide="cpu"></i> GaussView</div>
-      <div class="skill-chip"><i data-lucide="layers"></i> Blender</div>
-      <div class="skill-chip"><i data-lucide="flask-round"></i> OVITO</div>
-      <div class="skill-chip"><i data-lucide="file-code-2"></i> LaTeX</div>
-      <div class="skill-chip"><i data-lucide="terminal"></i> NumPy</div>
-      <div class="skill-chip"><i data-lucide="boxes"></i> ReaxFF</div>
-      <div class="skill-chip"><i data-lucide="microscope"></i> TheoDORE</div>
-      <div class="skill-chip"><i data-lucide="beaker"></i> ESPResSo</div>
+      <div class="skill-chip">⚛️ LAMMPS</div>
+      <div class="skill-chip">🧪 Gaussian</div>
+      <div class="skill-chip">🐍 Python</div>
+      <div class="skill-chip">⚡ Electrochemistry</div>
+      <div class="skill-chip">💾 Quantum Espresso</div>
+      <div class="skill-chip">📦 ORCA</div>
+      <div class="skill-chip">📊 Matplotlib</div>
+      <div class="skill-chip">🌐 JavaScript</div>
+      <div class="skill-chip">🖥️ GaussView</div>
+      <div class="skill-chip">🎨 Blender</div>
+      <div class="skill-chip">🔬 OVITO</div>
+      <div class="skill-chip">📄 LaTeX</div>
+      <div class="skill-chip">▶️ NumPy</div>
+      <div class="skill-chip">📦 ReaxFF</div>
+      <div class="skill-chip">🔬 TheoDORE</div>
+      <div class="skill-chip">🧫 ESPResSo</div>
     </div>
   </div>
 
@@ -1305,7 +1287,7 @@
 
       <!-- MD Potentials Review -->
       <div class="project-card reveal">
-        <div class="project-icon purple"><i data-lucide="book-open"></i></div>
+        <div class="project-icon purple">📖</div>
         <h3>Comprehensive Review of MD Potentials</h3>
         <p>
           Academic paper surveying the evolution from Lennard-Jones pairwise interactions to modern 
@@ -1322,7 +1304,7 @@
 
       <!-- IChTO Problem 11 -->
       <div class="project-card reveal">
-        <div class="project-icon green"><i data-lucide="droplets"></i></div>
+        <div class="project-icon green">💧</div>
         <h3>Microplastics Removal via Chitosan Flocculation</h3>
         <p>
           IChTO Problem 11 — Designed a chitosan coagulation-flocculation system to reduce micro- 
@@ -1338,7 +1320,7 @@
 
       <!-- IChTO Problem 12 -->
       <div class="project-card reveal">
-        <div class="project-icon pink"><i data-lucide="cookie"></i></div>
+        <div class="project-icon pink">🍪</div>
         <h3>Restoring Crispiness in Soggy Chips</h3>
         <p>
           IChTO Problem 12 — Ethanol-based moisture displacement from starch matrix. Coarse-grained 
@@ -1355,7 +1337,7 @@
 
       <!-- SiO2 MD -->
       <div class="project-card reveal">
-        <div class="project-icon yellow"><i data-lucide="flame"></i></div>
+        <div class="project-icon yellow">🔥</div>
         <h3>Amorphous SiO&#8322; Thermal Dynamics</h3>
         <p>
           Molecular dynamics simulations of amorphous silica using BKS potentials (Buckingham + Coulomb). 
@@ -1372,7 +1354,7 @@
 
       <!-- Blender Plugin -->
       <div class="project-card reveal">
-        <div class="project-icon purple"><i data-lucide="box"></i></div>
+        <div class="project-icon purple">📦</div>
         <h3>LAMMPS &#8594; Blender 3D Visualization</h3>
         <p>
           Custom Python plugin for Blender 4.x that imports LAMMPS trajectory dump files 
@@ -1388,7 +1370,7 @@
 
       <!-- Electroanalytical Chemistry -->
       <div class="project-card reveal">
-        <div class="project-icon green"><i data-lucide="activity"></i></div>
+        <div class="project-icon green">📈</div>
         <h3>Iron Electroanalysis via Cyclic Voltammetry</h3>
         <p>
           Experimental electrochemistry project — quantified iron concentrations using CV with 
@@ -1405,7 +1387,7 @@
 
       <!-- Sea Temperature -->
       <div class="project-card reveal">
-        <div class="project-icon pink"><i data-lucide="thermometer"></i></div>
+        <div class="project-icon pink">🌡️</div>
         <h3>Korean Sea Temperature Trend Analysis</h3>
         <p>
           Comparative analysis of vertical water temperature profiles across East Sea, South Sea, 
@@ -1421,7 +1403,7 @@
 
       <!-- Graduation Research -->
       <div class="project-card reveal">
-        <div class="project-icon yellow"><i data-lucide="graduation-cap"></i></div>
+        <div class="project-icon yellow">🎓</div>
         <h3>Graduation Research — Nano-Biosensors</h3>
         <p>
           Capstone project focused on electrochemical nano-roughening and gold nanostructure synthesis 
@@ -1437,7 +1419,7 @@
 
       <!-- Forensic Science -->
       <div class="project-card reveal">
-        <div class="project-icon purple"><i data-lucide="heart-pulse"></i></div>
+        <div class="project-icon purple">💓</div>
         <h3>Forensic Heart Rate Simulation</h3>
         <p>
           Real-time heart rate monitor simulation with dual-transition BPM modeling — resting 
@@ -1601,10 +1583,10 @@
     </p>
     <div class="contact-links reveal">
       <a href="mailto:kimhwi097@gmail.com" class="contact-link">
-        <i data-lucide="mail"></i> kimhwi097@gmail.com
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> kimhwi097@gmail.com
       </a>
       <a href="mailto:24-022@ksa.hs.kr" class="contact-link">
-        <i data-lucide="school"></i> 24-022@ksa.hs.kr
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 22v-4a2 2 0 1 0-4 0v4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M18 5v17"/><path d="m4 6 8-4 8 4"/><path d="M6 5v17"/></svg> 24-022@ksa.hs.kr
       </a>
     </div>
   </section>
@@ -1618,11 +1600,6 @@
   <script>
     // Wait for deferred scripts to load before initializing
     function initApp() {
-      // ========================================
-      // LUCIDE ICONS
-      // ========================================
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-
     // ========================================
     // CURSOR GLOW
     // ========================================
@@ -1776,15 +1753,13 @@
       const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const gap = 3;
+      const gap = 4;
       for (let y = 0; y < textCoordinates.height; y += gap) {
         for (let x = 0; x < textCoordinates.width; x += gap) {
           if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
-            // Particle colors in accent purple-blue range
             const hue = 240 + Math.random() * 30;
-            const sat = 60 + Math.random() * 30;
-            const lit = 70 + Math.random() * 20;
-            particlesArray.push(new Particle(x, y, `hsl(${hue}, ${sat}%, ${lit}%)`));
+            const c = `hsl(${hue},${70 + Math.random()*20|0}%,${72 + Math.random()*18|0}%)`;
+            particlesArray.push(new Particle(x, y, c));
           }
         }
       }
