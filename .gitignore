@@ -3,6 +3,8 @@ index_backup.html
 index_new.html
 initial_particles.txt
 title_generation.txt
+*_original.*
+particle_formation.gif
 
 # LAMMPS binary & data (too large for web)
 lmp.exe

@@ -9,15 +9,16 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+  <!-- GSAP + ScrollTrigger (deferred) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lucide Icons (deferred) -->
+  <script src="https://unpkg.com/lucide@0.263.1" defer></script>
 
   <style>
     /* ========================================
@@ -1060,7 +1061,7 @@
   <div class="video-modal-overlay" id="videoModal">
     <button class="video-modal-close" id="videoModalClose">&times;</button>
     <div class="video-modal-content">
-      <video id="modalVideo" controls>
+      <video id="modalVideo" controls preload="none">
         <source src="./particle_formation.mp4" type="video/mp4">
       </video>
     </div>
@@ -1269,7 +1270,7 @@
     <div class="featured-project reveal-scale">
       <div class="featured-inner">
         <div class="featured-media">
-          <video autoplay loop muted playsinline>
+          <video autoplay loop muted playsinline preload="metadata" loading="lazy">
             <source src="./particle_formation.mp4" type="video/mp4">
           </video>
         </div>
@@ -1615,10 +1616,12 @@
 
   <!-- ==================== SCRIPTS ==================== -->
   <script>
-    // ========================================
-    // LUCIDE ICONS
-    // ========================================
-    lucide.createIcons();
+    // Wait for deferred scripts to load before initializing
+    function initApp() {
+      // ========================================
+      // LUCIDE ICONS
+      // ========================================
+      if (typeof lucide !== 'undefined') lucide.createIcons();
 
     // ========================================
     // CURSOR GLOW
@@ -1787,7 +1790,9 @@
       }
     }
 
+    let particleAnimating = true;
     function animateParticles() {
+      if (!particleAnimating) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].draw();
@@ -1803,10 +1808,23 @@
       initParticles();
     });
 
+    // Pause particle animation when hero is off-screen for performance
+    const heroObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!particleAnimating) { particleAnimating = true; animateParticles(); }
+        } else {
+          particleAnimating = false;
+        }
+      });
+    }, { threshold: 0 });
+    heroObserver.observe(heroEl);
+
     // ========================================
     // GSAP SCROLL ANIMATIONS
     // ========================================
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    if (typeof gsap !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     // Reveal animations
     gsap.utils.toArray('.reveal').forEach(el => {
@@ -1953,6 +1971,15 @@
         once: true,
       });
     });
+    } // end GSAP check
+    } // end initApp
+
+    // Run initApp when deferred scripts are ready
+    if (document.readyState === 'complete') {
+      initApp();
+    } else {
+      window.addEventListener('load', initApp);
+    }
   </script>
 </body>
 </html>
